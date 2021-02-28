@@ -218,6 +218,7 @@
 200. 话题详情
 201. 话题详情热门动态
 202. 歌单详情动态
+203. 绑定手机
 
 ## 安装
 
@@ -254,6 +255,17 @@ windows 下使用 git-bash 或者 cmder 等终端执行以下命令 :
 ```shell
 $ set HOST=127.0.0.1 && node app.js
 ```
+
+## Vercel 部署
+v4.0.8 加入了 Vercel 配置文件,可以直接在 Vercel 下部署了,不需要自己的服务器
+### 操作方法
+1. fork 此项目
+2. 在 Vercel 官网点击 `New Project`
+3. 点击 `Import Git Repository` 并选择你 fork 的此项目并点击`import`
+4. 点击 `PERSONAL ACCOUNT` 的 `select`
+5. 直接点`Continue`
+6. `PROJECT NAME`自己填,`FRAMEWORK PRESET` 选 `Other` 然后直接点 `Deploy` 接着等部署完成即可  
+
 ## 可以使用代理
 
 在 query 参数中加上 proxy=your-proxy 即可让这一次的请求使用 proxy
@@ -478,8 +490,6 @@ v3.30.0后支持手动传入cookie,登录接口返回内容新增 `cookie` 字�
 
 **调用例子 :** `/captcha/sent?phone=13xxx`
 
-
-
 ### 验证验证码
 
 说明 : 调用此接口 ,传入手机号码和验证码, 可校验验证码是否正确
@@ -511,16 +521,22 @@ v3.30.0后支持手动传入cookie,登录接口返回内容新增 `cookie` 字�
 
 `nickname`: 昵称
 
+**可选参数 :**  
+
+`countrycode`: 国家码，用于国外手机号，例如美国传入：`1` ,默认86即中国
+
 **接口地址 :** `/register/cellphone`
 
 **调用例子 :** `/register/cellphone?phone=13xxx&password=xxxxx&captcha=1234&nickname=binary1345`
 
 ### 检测手机号码是否已注册
 说明 : 调用此接口 ,可检测手机号码是否已注册  
-**必选参数 :** 
+**必选参数 :**  
 `phone` :  手机号码  
-**可选参数 :**
-`countrycode`: 国家码，用于国外手机号，例如美国传入：`1` 
+
+**可选参数 :**  
+`countrycode`: 国家码，用于国外手机号，例如美国传入：`1` ,默认86即中国  
+
 **接口地址 :** `/cellphone/existence/check`
 
 **调用例子 :** `/cellphone/existence/check?phone=13xxx`
@@ -834,14 +850,14 @@ tags: 歌单标签
 
 **必选参数 :** `uid` : 用户 id  
 
-**可选参数 :** `limit` : 返回数量 , 默认为 30   
+**可选参数 :** 
+`limit` : 返回数量 , 默认为 30   
 
-`lasttime` : 返回数据的 `lasttime` ,默认-1,传入上一次返回结果的 lasttime,将会返回下一页的数据
-
+`offset` : 偏移数量，用于分页 ,如 :( 页数 -1)\*30, 其中 30 为 limit 的值 , 默认为 0
 
 **接口地址 :** `/user/followeds`
 
-**调用例子 :** `/user/followeds?uid=32953014` `/user/followeds?uid=416608258&time=1560152549136`
+**调用例子 :** `/user/followeds?uid=32953014` `/user/followeds?uid=416608258&limit=1` `/user/followeds?uid=416608258&limit=1&offset=1`
 
 ### 获取用户动态
 
@@ -2907,7 +2923,7 @@ type='1009' 获取其 id, 如`/search?keywords= 代码时间 &type=1009`
 
 **调用例子 :** `/send/text?user_ids=32953014&msg=test`,`/send/text?user_ids=32953014,475625142&msg=test`
 
-### 发送私信音乐
+### 发送私信(带歌曲)
 
 说明 : 登录后调用此接口 , 传入用户 id 和要发送的信息,音乐id, 可以发送音乐私信,返回内容为历史私信
 
@@ -2915,12 +2931,29 @@ type='1009' 获取其 id, 如`/search?keywords= 代码时间 &type=1009`
 
 `user_ids` : 用户 id,多个需用逗号隔开
 
+`id` : 要发送音乐的id
+
 `msg` : 要发送的信息
 
 **接口地址 :** `/send/song`
 
 **调用例子 :** `/send/song?user_ids=1&id=351318&msg=测试`
 
+### 发送私信(带专辑)
+
+说明 : 登录后调用此接口 , 传入用户 id 和要发送的信息,专辑id, 可以发送专辑私信,返回内容为消息id
+
+**必选参数 :**
+
+`user_ids` : 用户 id,多个需用逗号隔开
+
+`id` : 要发送专辑的id
+
+`msg` : 要发送的信息
+
+**接口地址 :** `/send/album`
+
+**调用例子 :** `/send/album?user_ids=1&id=351318&msg=测试`
 
 ### 发送私信(带歌单)
 
