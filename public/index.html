@@ -1,58 +1,455 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-cn">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>网易云音乐 API</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>网易云音乐 API</title>
+    <link rel="shortcut icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/imsyy/Picture/2020/09/favicon.webp">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/volantis-x/cdn-fontawesome-pro@master/css/all.min.css"
+        media="all">
+    <!--引入izitoast-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/css/iziToast.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/js/iziToast.min.js"></script>
+    <noscript>
+        <div class="kill-noscript">
+            <h1><b>抱歉，您的浏览器无法访问本站</b></h1>
+            <h3>本页面需要浏览器支持（启用）JavaScript</h3><br> <a target="_blank" rel="noopener"
+                href="https://www.baidu.com/s?wd=启用JavaScript"><strong>了解详情</strong></a>
+        </div>
+    </noscript>
+    <style>
+        html {
+            overflow-x: hidden !important;
+            overflow-y: hidden !important
+        }
+
+        .kill-noscript {
+            text-align: center;
+            height: 100%;
+            margin-top: 15%;
+            margin-bottom: 5500%
+        }
+
+        .content,
+        .footer {
+            text-align: center
+        }
+
+        button,
+        html {
+            font-family: var(--main-font)
+        }
+
+        :root {
+            --bg-anim-main-color: rgba(35, 157, 218, 0.6);
+            --bg-anim-alt-color: rgba(35, 157, 218, 0.1);
+            --main-color: #000;
+            --text-color: #888;
+            --link-color: #444;
+            --inverse-color: #fff;
+            --main-font: 'PingFang SC', "Open Sans", 'Microsoft YaHei', sans-serif;
+            font-size: 16px
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --main-color: #FFF;
+                --text-color: #888;
+                --link-color: #CCC;
+                --inverse-color: #000
+            }
+
+            .field {
+                background: #111;
+                transition: all .5s ease
+            }
+        }
+
+        html {
+            color: var(--text-color)
+        }
+
+        body {
+            margin: 0;
+            width: 100%
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--link-color);
+            outline: 0
+        }
+
+        i.fad.fa-garage {
+            height: 10rem;
+            width: 10rem;
+            margin: 2rem;
+            font-size: 8rem;
+        }
+
+        i.fad.fa-list-music {
+            height: 10rem;
+            width: 10rem;
+            margin: 2rem;
+            font-size: 10rem;
+        }
+
+        .title {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .wrapper {
+            position: relative;
+            display: flex;
+            width: 100%;
+            max-width: 1080px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 90vh;
+            box-sizing: border-box
+        }
+
+        .field,
+        .footer {
+            position: fixed;
+            width: 100%
+        }
+
+        .content {
+            color: var(--main-color)
+        }
+
+        .content h5 {
+            color: var(--text-color)
+        }
+
+        .content h2 {
+            margin: 0 1em
+        }
+
+        .footer {
+            bottom: 2rem;
+            font-size: 95%;
+            margin: 0 auto;
+            line-height: 1.75rem;
+        }
+
+        .iziToast-message.slideIn {
+            margin-top: 5px !important;
+        }
+
+        .iziToast:after {
+            box-shadow: none !important;
+        }
+
+        .iziToast {
+            border-radius: 5px !important;
+        }
+
+        a.social {
+            margin-left: 0.5rem;
+            margin-right: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        button {
+            border: var(--main-color) solid;
+            border-radius: 4px;
+            padding: .5rem 1rem;
+            font-size: 1rem;
+            background: 0 0;
+            transition: all .5s ease;
+            margin: 1rem 0;
+            color: var(--main-color)
+        }
+
+        button i {
+            margin-right: 1rem
+        }
+
+        button:hover {
+            border: var(--main-color) solid;
+            background: var(--main-color);
+            color: var(--inverse-color);
+            transition: all .5s ease
+        }
+
+        @media screen and (max-width: 980px) {
+            :root {
+                font-size: 16px
+            }
+        }
+
+        .field {
+            height: 100%;
+            transition: all .5s ease
+        }
+
+        .item1,
+        .item2,
+        .item3 {
+            display: block;
+            background-color: rgb(136 136 136 / 51%);
+            position: absolute;
+            top: 105vh
+        }
+
+        .item1 {
+            width: 25px;
+            height: 25px
+        }
+
+        .item2 {
+            width: 15px;
+            height: 15px
+        }
+
+        .item3 {
+            width: 8px;
+            height: 8px
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(10px)
+            }
+
+            50% {
+                transform: translateX(-10px)
+            }
+        }
+
+        @-webkit-keyframes shake {
+
+            0%,
+            100% {
+                -webkit-transform: translateX(10px)
+            }
+
+            50% {
+                -webkit-transform: translateX(-10px)
+            }
+        }
+
+        .shake {
+            animation: shake 2s ease 0s infinite normal;
+            -webkit-animation: shake 2s ease 0s infinite normal
+        }
+
+        @keyframes move {
+            0% {
+                transform: translateY(0)
+            }
+
+            100% {
+                transform: translateY(-100vh);
+                opacity: 0
+            }
+        }
+
+        @-webkit-keyframes move {
+            0% {
+                -webkit-transform: translateY(0)
+            }
+
+            100% {
+                -webkit-transform: translateY(-100vh);
+                opacity: 0
+            }
+        }
+
+        .field div:nth-child(1) {
+            -webkit-animation: move ease-in infinite;
+            animation: move ease-in infinite;
+            -webkit-animation-delay: 2.7s;
+            animation-delay: 2.7s;
+            -webkit-animation-duration: 6.5s;
+            animation-duration: 6.5s;
+            left: calc(50% + 27 * 1vw)
+        }
+
+        .field div:nth-child(2) {
+            -webkit-animation: move ease-in infinite;
+            animation: move ease-in infinite;
+            -webkit-animation-delay: 1.5s;
+            animation-delay: 1.5s;
+            -webkit-animation-duration: 6.1s;
+            animation-duration: 6.1s;
+            left: calc(50% + -30 * 1vw)
+        }
+
+        .field div:nth-child(3) {
+            -webkit-animation: move ease-in infinite;
+            animation: move ease-in infinite;
+            -webkit-animation-delay: 1.5s;
+            animation-delay: 1.5s;
+            -webkit-animation-duration: 7.9s;
+            animation-duration: 7.9s;
+            left: calc(50% + -17 * 1vw)
+        }
+
+        .field div:nth-child(4) {
+            -webkit-animation: move ease-in infinite;
+            animation: move ease-in infinite;
+            -webkit-animation-delay: 3s;
+            animation-delay: 3s;
+            -webkit-animation-duration: 10.8s;
+            animation-duration: 10.8s;
+            left: calc(50% + 1 * 1vw)
+        }
+
+        .field div:nth-child(5) {
+            -webkit-animation: move ease-in infinite;
+            animation: move ease-in infinite;
+            -webkit-animation-delay: .5s;
+            animation-delay: .5s;
+            -webkit-animation-duration: 9.5s;
+            animation-duration: 9.5s;
+            left: calc(50% + 32 * 1vw)
+        }
+
+        .field div:nth-child(6) {
+            -webkit-animation: move ease-in infinite;
+            animation: move ease-in infinite;
+            -webkit-animation-delay: .9s;
+            animation-delay: .9s;
+            -webkit-animation-duration: 14.7s;
+            animation-duration: 14.7s;
+            left: calc(50% + 43 * 1vw)
+        }
+
+        .field div:nth-child(7) {
+            -webkit-animation: move ease-in infinite;
+            animation: move ease-in infinite;
+            -webkit-animation-delay: 1.7s;
+            animation-delay: 1.7s;
+            -webkit-animation-duration: 23s;
+            animation-duration: 23s;
+            left: calc(50% + 34 * 1vw)
+        }
+
+        .field div:nth-child(8) {
+            -webkit-animation: move ease-in infinite;
+            animation: move ease-in infinite;
+            -webkit-animation-delay: 2.3s;
+            animation-delay: 2.3s;
+            -webkit-animation-duration: 12.6s;
+            animation-duration: 12.6s;
+            left: calc(50% + 12 * 1vw)
+        }
+
+        .field div:nth-child(9) {
+            -webkit-animation: move ease-in infinite;
+            animation: move ease-in infinite;
+            -webkit-animation-delay: 1s;
+            animation-delay: 1s;
+            -webkit-animation-duration: 9.2s;
+            animation-duration: 9.2s;
+            left: calc(50% + 3 * 1vw)
+        }
+
+        .field div:nth-child(10) {
+            -webkit-animation: move ease-in infinite;
+            animation: move ease-in infinite;
+            -webkit-animation-delay: 2.8s;
+            animation-delay: 2.8s;
+            -webkit-animation-duration: 20.8s;
+            animation-duration: 20.8s;
+            left: calc(50% + -14 * 1vw)
+        }
+
+        .field div:nth-child(11) {
+            -webkit-animation: move ease-in infinite;
+            animation: move ease-in infinite;
+            -webkit-animation-delay: 2.3s;
+            animation-delay: 2.3s;
+            -webkit-animation-duration: 16s;
+            animation-duration: 16s;
+            left: calc(50% + -45 * 1vw)
+        }
+
+        .field div:nth-child(12) {
+            -webkit-animation: move ease-in infinite;
+            animation: move ease-in infinite;
+            -webkit-animation-delay: 1.2s;
+            animation-delay: 1.2s;
+            -webkit-animation-duration: 8.4s;
+            animation-duration: 8.4s;
+            left: calc(50% + -6 * 1vw)
+        }
+
+        .field div:nth-child(2n),
+        .field div:nth-child(7) {
+            background-color: rgb(207 207 207 / 17%);
+        }
+    </style>
 </head>
 
 <body>
-  <h1>网易云音乐 API</h1>
-  当你看到这个页面时,这个服务已经成功跑起来了~
-  <a href="https://neteasecloudmusicapi.vercel.app">查看文档</a>
-  <h2>例子:</h2>
-  <ul>
-    <li>1. <a href="/search?keywords=海阔天空">搜索</a></li>
-    <li>2. <a href="/comment/music?id=186016&limit=1">歌曲评论</a></li>
-    <li>3. <a href="/dj/program?rid=336355127">电台节目</a></li>
-  </ul>
-  <style>
-    html,
-    body {
-      height: 100vh;
-      width: 100vw;
-      margin: 0;
-      padding: 0;
-      background: #ffffff;
-      text-align: center;
-      margin-top: 30px;
-      overflow: hidden;
-    }
+    <div class="field">
+        <div class="item1 shake"></div>
+        <div class="item2 shake"></div>
+        <div class="item3 shake"></div>
+        <div class="item1 shake"></div>
+        <div class="item2 shake"></div>
+        <div class="item1 shake"></div>
+        <div class="item1 shake"></div>
+        <div class="item2 shake"></div>
+        <div class="item3 shake"></div>
+        <div class="item1 shake"></div>
+        <div class="item2 shake"></div>
+        <div class="item3 shake"></div>
+    </div>
+    <div class="wrapper">
+        <div class="icon"><i class="fad fa-list-music"></i></div>
+        <div class="content">
+            <p class="title">网易云音乐 API</p>
+            <p class="text">当你看到这个页面时,这个服务已经成功跑起来了~ </p>
+        </div><button onclick="window.open('https://neteasecloudmusicapi.vercel.app/','_blank');"><i class="fad fa-book"></i>查看文档</button>
+    </div>
+    <div class="footer"> <span><a class="social" href="https://github.com/imsyy/" target="_blank"><i
+                    class="fad fa-code-branch"></i></a> · <a class="social" href="https://blog.imsyy.top/"
+                target="_blank"><i class="fad fa-blog"></i></a>
+            · <a class="social" href="mailto:one@imsyy.top" target="_blank"><i
+                    class="fad fa-envelope-open-text"></i></a></span><br><span>Copyright ©
+            2020
+            <script>
+                document.write(' - ' + (new Date()).getFullYear())
+            </script> <a href="https://imsyy.top/" target="_blank">無名</a>
+        </span><br><span><a href="https://beian.miit.gov.cn/" target="_blank">豫ICP备20013231-2 号</a></span></div>
 
-    * {
-      color: rgb(100, 100, 100);
-    }
-
-    a {
-      color: #42b983;
-    }
-
-    ul,
-    li {
-      margin: 0;
-    }
-
-    ul {
-      margin-left: -40px;
-      line-height: 30px;
-    }
-
-    li {
-      list-style: none;
-    }
-  </style>
+    <!--izitoast弹窗设置-->
+    <script>
+        iziToast.settings({
+            timeout: 4000,
+            //调试
+            icon: 'Fontawesome',
+            closeOnEscape: 'true',
+            position: 'topRight',
+            transitionOut: 'fadeOutRight',
+            displayMode: '2',
+            layout: '2',
+            transitionIn: 'bounceInLeft',
+        });
+    </script>
+    <!--izitoast内容-->
+    <script>
+        function up() {
+            iziToast.info({
+                icon: 'fad fa-times-octagon',
+                backgroundColor: '#efefef',
+                title: '上传暂时关闭',
+                message: '等我有服务器了再说 ~'
+            });
+        }
+    </script>
 </body>
 
 </html>
